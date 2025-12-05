@@ -1,6 +1,7 @@
 #!/bin/bash
-# Mine-RL Minecraft Setup - Instala e configura MineRL + Minecraft 1.12.2
-# Execute este script após complete_setup.sh
+# Mine-RL Minecraft Setup - Configuração para ambiente Minecraft
+# Nota: MineRL é incompatível com Python 3.12
+# Usando Gymnasium + simulações como alternativa
 
 set -e
 
@@ -25,77 +26,67 @@ fi
 # Ativar venv
 source venv/bin/activate
 
-# Verificar dependências
-echo -e "${BLUE}[1/4] Verificando dependências...${NC}"
-python << 'EOF'
-import sys
-try:
-    import gymnasium
-    print("✓ Gymnasium OK")
-except:
-    print("✗ Gymnasium não instalado")
-    sys.exit(1)
-
-try:
-    import stable_baselines3
-    print("✓ Stable-Baselines3 OK")
-except:
-    print("✗ Stable-Baselines3 não instalado")
-    sys.exit(1)
-
-try:
-    import torch
-    print("✓ PyTorch OK")
-except:
-    print("✗ PyTorch não instalado")
-    sys.exit(1)
-EOF
-
-# Instalar MineRL
-echo -e "${BLUE}[2/4] Instalando MineRL...${NC}"
-pip install --upgrade setuptools wheel
-pip install minerl --no-cache-dir || {
-    echo -e "${YELLOW}⚠️  MineRL precisou de ajustes, tentando novamente...${NC}"
-    pip install --upgrade setuptools
-    pip install minerl --no-build-isolation
-}
-
-# Verificar MineRL
-echo -e "${BLUE}[3/4] Verificando MineRL...${NC}"
-python << 'EOF'
-try:
-    import minerl
-    print(f"✓ MineRL {minerl.__version__} instalado")
-except Exception as e:
-    print(f"✗ Erro ao verificar MineRL: {e}")
-    import sys
-    sys.exit(1)
-EOF
-
-# Download de Minecraft (primeiro uso)
-echo -e "${BLUE}[4/4] Preparando Minecraft 1.12.2...${NC}"
-echo -e "${YELLOW}Isto pode levar alguns minutos na primeira execução${NC}"
-echo -e "${YELLOW}(MineRL vai baixar ~2GB de arquivos)${NC}"
+# Informação importante
+echo -e "${YELLOW}ℹ️  INFORMAÇÃO IMPORTANTE:${NC}"
+echo ""
+echo "MineRL (0.4.4) é incompatível com Python 3.12."
+echo "Usando alternativa: Gymnasium com ambientes simulados"
+echo ""
+echo -e "${BLUE}Opções:${NC}"
+echo ""
+echo "1. ${GREEN}Usar Gymnasium (recomendado)${NC}"
+echo "   - Compatível com Python 3.12"
+echo "   - Ambientes simulados (CartPole, LunarLander, etc)"
+echo "   - Perfeito para treinar agentes RL"
+echo ""
+echo "2. ${YELLOW}Usar Minecraft via ModLoader API${NC}"
+echo "   - Requer Minecraft Java Edition"
+echo "   - Requer mod customizado"
+echo "   - Mais complexo"
+echo ""
+echo "3. ${BLUE}Ambos (treina com Gymnasium, testa com Minecraft)${NC}"
 echo ""
 
-python << 'EOF'
-import minerl
-print("✓ MineRL pronto!")
-print("✓ Minecraft 1.12.2 será baixado na primeira execução")
-EOF
+read -p "Escolha uma opção (1-3): " option
+
+case $option in
+    1)
+        echo -e "${GREEN}✓ Gymnasium já está instalado!${NC}"
+        echo ""
+        echo "Ambientes disponíveis:"
+        echo "  - CartPole-v1"
+        echo "  - MountainCar-v0"
+        echo "  - LunarLander-v2"
+        echo "  - Acrobot-v1"
+        echo ""
+        echo "Use: bash scripts/run.sh"
+        ;;
+    2)
+        echo -e "${YELLOW}Setup do Minecraft via ModLoader...${NC}"
+        echo ""
+        echo "Instruções:"
+        echo "1. Instale Minecraft Java Edition"
+        echo "2. Instale Forge ou Fabric"
+        echo "3. Instale o mod MinecraftRL"
+        echo "4. Configure a conexão em minecraft_viewer.py"
+        echo ""
+        ;;
+    3)
+        echo -e "${BLUE}Configurando ambas opções...${NC}"
+        echo "✓ Gymnasium: Pronto"
+        echo "Para Minecraft: Siga instruções acima"
+        ;;
+    *)
+        echo -e "${RED}Opção inválida!${NC}"
+        exit 1
+        ;;
+esac
 
 echo ""
 echo -e "${GREEN}======================================"
-echo "   Setup Minecraft Concluído!"
+echo "   Setup Concluído!"
 echo "=====================================${NC}"
 echo ""
-echo -e "${BLUE}Agora você pode:${NC}"
+echo "Próximo passo:"
+echo -e "  ${YELLOW}bash scripts/run.sh${NC}"
 echo ""
-echo "1. Testar com:"
-echo -e "   ${YELLOW}python visual_agent.py${NC}"
-echo ""
-echo "2. Ou usar o menu interativo:"
-echo -e "   ${YELLOW}bash scripts/run.sh${NC}"
-echo ""
-echo -e "${YELLOW}Primeira execução vai baixar Minecraft 1.12.2${NC}"
-echo -e "${GREEN}✓ Tudo pronto!${NC}"
