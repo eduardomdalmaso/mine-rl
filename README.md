@@ -96,24 +96,32 @@ agent.create_model()
 agent.render_episode(num_steps=500)
 ```
 
-## ✅ Requisitos do Sistema
+## ✅ Setup Mínimo Recomendado
 
-```
-✓ Python 3.12
-✓ Java 8+ (para MineRL)
-✓ Git
-✓ ~10GB espaço livre (para MineRL)
-```
+### 🖥️ Requisitos Mínimos
+| Recurso | Mínimo | Recomendado |
+|---------|--------|------------|
+| **CPU** | Intel i5 / Ryzen 5 (4 núcleos) | Intel i7 / Ryzen 7 (6+ núcleos) |
+| **RAM** | 8GB | 16GB+ |
+| **GPU** | CPU integrada ou GTX 1050 | RTX 2060+ / RTX 3060+ |
+| **Espaço** | 5GB | 15GB |
+| **Python** | 3.8+ | 3.10+ |
+| **Java** | OpenJDK 8+ | OpenJDK 8+ |
 
-## 🖥️ Setup Utilizado
+### Especificações por Algoritmo
+| Algoritmo | CPU | RAM | GPU | Tempo/Época |
+|-----------|-----|-----|-----|------------|
+| **PPO** | 4 cores | 8GB | CPU | ~2-5 min |
+| **DQN** | 4 cores | 6GB | CPU | ~1-3 min |
+| **A2C** | 2 cores | 4GB | CPU | ~30 seg |
 
-| Recurso | Seu Setup |
-|---------|-----------|
-| CPU | Ryzen 7 7800X3D ✓✓✓ |
-| RAM | 64GB ✓✓✓ |
-| GPU | Integrada suficiente ✓ |
-
-**Você vai rodar com EXCELENTE performance!**
+### 💾 Espaço em Disco
+- **Codebase**: ~200MB
+- **Python + dependências**: ~2GB
+- **MineRL assets**: ~2.5GB
+- **Modelos salvos**: ~500MB-1GB por modelo
+- **Vídeos**: ~100-500MB por episódio gravado
+- **Total recomendado**: 15GB livre
 
 ## 🆘 Problemas?
 
