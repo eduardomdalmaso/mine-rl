@@ -24,15 +24,20 @@ Treinar agentes RL que aprendam a:
 git clone https://github.com/eduardomdalmaso/mine-rl.git
 cd mine-rl
 
-# Setup Python + dependências
+# Setup Python + dependências (Python 3.10 ou 3.11)
 bash scripts/complete_setup.sh
 
-# Instalar MineRL (requer Java 8+)
+# Instalar ambiente (Gymnasium automático, MineRL opcional)
 bash scripts/minecraft_setup.sh
 
 # Menu interativo
 bash scripts/run.sh
 ```
+
+⚠️ **Nota importante sobre MineRL**:
+- MineRL 0.4.4 só funciona com **Python 3.10 ou anterior**
+- Python 3.12+ não é compatível (dependência legacy em gym 0.19.0)
+- **Solução**: Use Gymnasium (63 ambientes RL disponíveis) ✅
 
 ## 📦 Dependências
 
@@ -41,7 +46,7 @@ bash scripts/run.sh
 - **torch**: Deep Learning com PyTorch ✓
 - **numpy**: Computação numérica ✓
 - **opencv-python**: Processamento de imagens ✓
-- **minerl**: Ambiente Minecraft para RL (instalado via GitHub)
+- **minerl**: Ambiente Minecraft para RL (opcional - requer Python ≤3.10)
 
 ## 📁 Estrutura
 
@@ -105,8 +110,8 @@ agent.render_episode(num_steps=500)
 | **RAM** | 8GB | 16GB+ |
 | **GPU** | CPU integrada ou GTX 1050 | RTX 2060+ / RTX 3060+ |
 | **Espaço** | 5GB | 15GB |
-| **Python** | 3.8+ | 3.10+ |
-| **Java** | OpenJDK 8+ | OpenJDK 8+ |
+| **Python** | 3.10, 3.11 | 3.11, 3.12 |
+| **Java** | OpenJDK 8+ (opcional) | OpenJDK 8+ (opcional) |
 
 ### Especificações por Algoritmo
 | Algoritmo | CPU | RAM | GPU | Tempo/Época |
@@ -118,10 +123,11 @@ agent.render_episode(num_steps=500)
 ### 💾 Espaço em Disco
 - **Codebase**: ~200MB
 - **Python + dependências**: ~2GB
-- **MineRL assets**: ~2.5GB
+- **MineRL assets** (opcional): ~2.5GB
 - **Modelos salvos**: ~500MB-1GB por modelo
 - **Vídeos**: ~100-500MB por episódio gravado
-- **Total recomendado**: 15GB livre
+- **Total mínimo**: ~5GB
+- **Total completo**: ~15GB
 
 ## 🆘 Problemas?
 
