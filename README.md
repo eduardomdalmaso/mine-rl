@@ -24,7 +24,7 @@ Treinar agentes RL que aprendam a:
 git clone https://github.com/eduardomdalmaso/mine-rl.git
 cd mine-rl
 
-# Setup Python + dependências (Python 3.10 ou 3.11)
+# Setup Python + dependências (Gymnasium recomendado)
 bash scripts/complete_setup.sh
 
 # Instalar ambiente (Gymnasium automático, MineRL opcional)
@@ -35,9 +35,10 @@ bash scripts/run.sh
 ```
 
 ⚠️ **Nota importante sobre MineRL**:
-- MineRL 0.4.4 só funciona com **Python 3.10 ou anterior**
-- Python 3.12+ não é compatível (dependência legacy em gym 0.19.0)
-- **Solução**: Use Gymnasium (63 ambientes RL disponíveis) ✅
+- MineRL 0.4.4 tem dependências legadas incompatíveis (gym 0.19.0)
+- **Não funciona com Python 3.10+** (nem com compilação)
+- **Solução recomendada**: Use Gymnasium ✅ (63 ambientes RL disponíveis)
+- Se precisar de MineRL: considere Docker com Python 3.8-3.9
 
 ## 📦 Dependências
 
@@ -110,7 +111,7 @@ agent.render_episode(num_steps=500)
 | **RAM** | 8GB | 16GB+ |
 | **GPU** | CPU integrada ou GTX 1050 | RTX 2060+ / RTX 3060+ |
 | **Espaço** | 5GB | 15GB |
-| **Python** | 3.10, 3.11 | 3.11, 3.12 |
+| **Python** | 3.9+ (Gymnasium) | 3.10, 3.11, 3.12 |
 | **Java** | OpenJDK 8+ (opcional) | OpenJDK 8+ (opcional) |
 
 ### Especificações por Algoritmo
