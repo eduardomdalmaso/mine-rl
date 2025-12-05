@@ -53,7 +53,12 @@ EOF
 
 # Instalar MineRL
 echo -e "${BLUE}[2/4] Instalando MineRL...${NC}"
-pip install minerl
+pip install --upgrade setuptools wheel
+pip install minerl --no-cache-dir || {
+    echo -e "${YELLOW}⚠️  MineRL precisou de ajustes, tentando novamente...${NC}"
+    pip install --upgrade setuptools
+    pip install minerl --no-build-isolation
+}
 
 # Verificar MineRL
 echo -e "${BLUE}[3/4] Verificando MineRL...${NC}"
