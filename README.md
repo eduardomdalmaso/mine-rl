@@ -1,65 +1,38 @@
-# Mine-RL: Agentes Inteligentes no Minecraft
+# Mine-RL: Agentes RL no Minecraft
 
-Ambiente Python para treinar agentes de **Reinforcement Learning** em ambientes simulados tipo Minecraft. Este projeto fornece um setup completo com Gymnasium para desenvolver e testar agentes inteligentes.
+Treine agentes de **Reinforcement Learning** para jogar **Minecraft** usando MineRL + Stable-Baselines3. Visualize seus agentes jogando em tempo real com renderização.
 
-## ⚠️ Nota Importante
+## 🎮 Características
 
-**MineRL (versão oficial) é incompatível com Python 3.12.** Este projeto usa **Gymnasium** como alternativa principal, que é:
-- ✓ Compatível com Python 3.12
-- ✓ Bem mantido e atualizado
-- ✓ Perfeito para treinar agentes RL
-- ✓ Suporta muitos ambientes
-
-Se precisar de Minecraft real, use opções como:
-- Minecraft Forge + API customizada
-- Mineflayer (Node.js based)
-- Ou versione seu Python para 3.11
-
-## 🎮 Visualização em Tempo Real
-
-Com seu **Ryzen 7 7800X3D** você pode ver o agente aprendendo em tempo real! O projeto inclui:
-
-- 👀 **Visualização ao vivo** do agente treinando
-- 🎥 **Gravação de gameplay** em vídeo MP4
-- 🎯 **Treinamento interativo** com renderização
-- 📊 **Estatísticas em tempo real** (FPS, recompensas, etc)
+- 👀 Visualização ao vivo do agente jogando Minecraft
+- 🎥 Gravação de gameplay em vídeo MP4
+- 🤖 Algoritmos RL: PPO, DQN, A2C, SAC, TD3
+- 📊 Treinamento configurável com logging
 
 ## 🎯 Objetivo
 
 Treinar agentes RL que aprendam a:
-- Navegar em ambientes 3D
-- Resolver problemas e desafios
-- Otimizar estratégias
-- Maximizar recompensas
+- Navegar em ambientes 3D (Minecraft)
+- Coletar recursos e materiais
+- Executar tarefas sequenciais
+- Resolver desafios e objetivos
 
 ## 🚀 Quick Start
 
-### 1. Instalação Básica
-
 ```bash
-# Clone o repositório
+# Clone
 git clone https://github.com/eduardomdalmaso/mine-rl.git
 cd mine-rl
 
-# Setup automático
+# Setup Python + dependências
 bash scripts/complete_setup.sh
-```
 
-### 2. Teste Rápido
+# Instalar MineRL (requer Java 8+)
+bash scripts/minecraft_setup.sh
 
-```bash
-python test_env.py
-```
-
-### 3. Visualização
-
-```bash
+# Menu interativo
 bash scripts/run.sh
 ```
-
-### 4. Minecraft (Opcional)
-
-Para usar Minecraft real, veja `scripts/minecraft_setup.sh`
 
 ## 📦 Dependências
 
@@ -67,38 +40,34 @@ Para usar Minecraft real, veja `scripts/minecraft_setup.sh`
 - **stable-baselines3**: Algoritmos RL (PPO, DQN, A2C) ✓
 - **torch**: Deep Learning com PyTorch ✓
 - **numpy**: Computação numérica ✓
-- **opencv-python**: Processamento de imagens + gravação de vídeo ✓
+- **opencv-python**: Processamento de imagens ✓
+- **minerl**: Ambiente Minecraft para RL (instalado via GitHub)
 
 ## 📁 Estrutura
 
 ```
 mine-rl/
-├── agent_minecraft.py       # Agente principal (estrutura)
-├── visual_agent.py          # Agente com visualização
-├── minecraft_viewer.py      # Info sobre Minecraft
-├── test_env.py              # Script de teste
-├── requirements.txt         # Dependências
+├── agent_minecraft.py      # Agente RL principal
+├── visual_agent.py         # Renderização + vídeo
+├── minecraft_viewer.py     # Verificação de requisitos
+├── requirements.txt        # Dependências
 ├── README.md               # Esta documentação
-├── scripts/
-│   ├── complete_setup.sh   # Setup completo
-│   ├── minecraft_setup.sh  # Info Minecraft
-│   ├── run.sh              # Menu interativo
-│   └── README.md           # Guia dos scripts
-└── venv/                   # Ambiente virtual
+└── scripts/
+    ├── complete_setup.sh   # Setup automático
+    ├── minecraft_setup.sh  # Instala MineRL
+    └── run.sh              # Menu interativo
 ```
 
-## 🎮 Ambientes Disponíveis
+## 🎮 Ambientes MineRL Disponíveis
 
-### Recomendados (Gymnasium)
-- **CartPole-v1** - Balancear poste (clássico)
-- **MountainCar-v0** - Subir montanha com carro
-- **LunarLander-v2** - Pousar módulo lunar ⭐
-- **Acrobot-v1** - Controlar pêndulo duplo
-- **BipedalWalker-v3** - Fazer bípede caminhar
+- **Navigate-v0** - Navegar no mundo
+- **ObtainDiamond-v0** - Conseguir diamante ⭐
+- **MineRLBasaltFindCave-v0** - Encontrar caverna
+- **MineRLBasaltCreateVillageAnimalPen-v0** - Criar cercado
+- **MineRLBasaltBuildVillageHouse-v0** - Construir casa
+- **MineRLBasaltMakeWaterfall-v0** - Fazer cascata
 
-### Mais Complexos
-- **Atari** (com ale-py)
-- **Robótica** (com mujoco)
+Veja mais em [MineRL Docs](https://minerl.readthedocs.io/)
 
 ## 🤖 Algoritmos Suportados
 
@@ -109,61 +78,63 @@ mine-rl/
 - **SAC** (Soft Actor-Critic)
 - **TD3** (Twin Delayed DDPG)
 
-## 📺 Exemplo de Uso - Visualização
+## 📺 Exemplo de Uso
 
 ```python
 from visual_agent import VisualMinecraftAgent
 
-# Criar agente visual
+# Com Gymnasium
 agent = VisualMinecraftAgent(env_name="LunarLander-v2", render=True)
 agent.create_environment(render_mode="human")
 agent.create_model()
-
-# Ver agente em tempo real
 agent.render_episode(num_steps=500)
 
-# Ou gravar como vídeo
-agent.render_rgb_array(num_steps=500, output_video="gameplay.mp4")
+# Com MineRL (após setup)
+agent = VisualMinecraftAgent(env_name="MineRLObtainDiamond-v0", render=True)
+agent.create_environment(render_mode="human")
+agent.create_model()
+agent.render_episode(num_steps=500)
 ```
 
-## ✅ Checklist de Setup
+## ✅ Requisitos do Sistema
 
 ```
-✓ Python 3.12 instalado
-✓ Git instalado
-✓ ~5GB espaço livre
+✓ Python 3.12
+✓ Java 8+ (para MineRL)
+✓ Git
+✓ ~10GB espaço livre (para MineRL)
 ```
 
-Execute para verificar:
-```bash
-bash scripts/complete_setup.sh
-```
+## 🖥️ Performance Esperada
 
-## 🖥️ Requisitos de Hardware
+| Recurso | Seu Setup |
+|---------|-----------|
+| CPU | Ryzen 7 7800X3D ✓✓✓ |
+| RAM | 64GB ✓✓✓ |
+| GPU | Integrada suficiente ✓ |
 
-| Recurso | Mínimo | Recomendado | Seu Setup |
-|---------|--------|-------------|-----------|
-| CPU | i5-8400 | Ryzen 5 5600X | Ryzen 7 7800X3D ✓ |
-| RAM | 8GB | 16GB | 64GB ✓ |
-| GPU | GTX 1060 | RTX 2080 | Integrada é suficiente |
-| Espaço | 10GB | 30GB | - |
-
-**Com seu setup você tem performance EXCELENTE!**
-
-## 📚 Referências
-
-- [Gymnasium Documentation](https://gymnasium.farama.org/)
-- [Stable-Baselines3](https://stable-baselines3.readthedocs.io/)
-- [OpenAI Spinning Up](https://spinningup.openai.com/)
+**Você vai rodar com EXCELENTE performance!**
 
 ## 🆘 Problemas?
 
-**Erro com MineRL?**
-- É normal, MineRL não suporta Python 3.12
-- Use Gymnasium (já está pronto!)
+**Java não encontrado?**
+```bash
+# Fedora/RHEL
+sudo dnf install java-1.8.0-openjdk
 
-**Quer Minecraft real?**
-- Veja `scripts/minecraft_setup.sh` para opções
+# Ubuntu/Debian
+sudo apt-get install openjdk-8-jdk
+
+# macOS
+brew install openjdk@8
+```
+
+**MineRL não instala?**
+```bash
+bash scripts/minecraft_setup.sh
+```
+
+Veja [MineRL Installation](https://minerl.readthedocs.io/en/latest/tutorials/getting_started.html) para mais ajuda.
 
 ## 📝 Licença
 

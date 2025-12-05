@@ -1,7 +1,6 @@
 #!/bin/bash
-# Mine-RL Minecraft Setup - Configuração para ambiente Minecraft
-# Nota: MineRL é incompatível com Python 3.12
-# Usando Gymnasium + simulações como alternativa
+# Mine-RL Minecraft Setup - Instala MineRL do repositório oficial do GitHub
+# Recomendação do site oficial: https://minerl.readthedocs.io/en/latest/tutorials/index.html
 
 set -e
 
@@ -12,7 +11,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 echo -e "${BLUE}======================================"
-echo "   Mine-RL - Minecraft Setup"
+echo "   Mine-RL - Minecraft Setup (Official GitHub)"
 echo "=====================================${NC}"
 echo ""
 
@@ -26,67 +25,93 @@ fi
 # Ativar venv
 source venv/bin/activate
 
-# Informação importante
-echo -e "${YELLOW}ℹ️  INFORMAÇÃO IMPORTANTE:${NC}"
-echo ""
-echo "MineRL (0.4.4) é incompatível com Python 3.12."
-echo "Usando alternativa: Gymnasium com ambientes simulados"
-echo ""
-echo -e "${BLUE}Opções:${NC}"
-echo ""
-echo "1. ${GREEN}Usar Gymnasium (recomendado)${NC}"
-echo "   - Compatível com Python 3.12"
-echo "   - Ambientes simulados (CartPole, LunarLander, etc)"
-echo "   - Perfeito para treinar agentes RL"
-echo ""
-echo "2. ${YELLOW}Usar Minecraft via ModLoader API${NC}"
-echo "   - Requer Minecraft Java Edition"
-echo "   - Requer mod customizado"
-echo "   - Mais complexo"
-echo ""
-echo "3. ${BLUE}Ambos (treina com Gymnasium, testa com Minecraft)${NC}"
-echo ""
+# Verificar dependências base
+echo -e "${BLUE}[1/4] Verificando dependências...${NC}"
+python << 'EOF'
+import sys
+try:
+    import gymnasium
+    print("✓ Gymnasium OK")
+except:
+    print("✗ Gymnasium não instalado")
+    sys.exit(1)
 
-read -p "Escolha uma opção (1-3): " option
+try:
+    import stable_baselines3
+    print("✓ Stable-Baselines3 OK")
+except:
+    print("✗ Stable-Baselines3 não instalado")
+    sys.exit(1)
 
-case $option in
-    1)
-        echo -e "${GREEN}✓ Gymnasium já está instalado!${NC}"
-        echo ""
-        echo "Ambientes disponíveis:"
-        echo "  - CartPole-v1"
-        echo "  - MountainCar-v0"
-        echo "  - LunarLander-v2"
-        echo "  - Acrobot-v1"
-        echo ""
-        echo "Use: bash scripts/run.sh"
-        ;;
-    2)
-        echo -e "${YELLOW}Setup do Minecraft via ModLoader...${NC}"
-        echo ""
-        echo "Instruções:"
-        echo "1. Instale Minecraft Java Edition"
-        echo "2. Instale Forge ou Fabric"
-        echo "3. Instale o mod MinecraftRL"
-        echo "4. Configure a conexão em minecraft_viewer.py"
-        echo ""
-        ;;
-    3)
-        echo -e "${BLUE}Configurando ambas opções...${NC}"
-        echo "✓ Gymnasium: Pronto"
-        echo "Para Minecraft: Siga instruções acima"
-        ;;
-    *)
-        echo -e "${RED}Opção inválida!${NC}"
-        exit 1
-        ;;
-esac
+try:
+    import torch
+    print("✓ PyTorch OK")
+except:
+    print("✗ PyTorch não instalado")
+    sys.exit(1)
+EOF
+
+# Verificar Java
+echo -e "${BLUE}[2/4] Verificando Java 8+...${NC}"
+if ! command -v java &> /dev/null; then
+    echo -e "${RED}✗ Java não encontrado!${NC}"
+    echo -e "${YELLOW}Instale Java 8:${NC}"
+    echo "  Ubuntu/Debian: sudo apt-get install openjdk-8-jdk"
+    echo "  macOS: brew install --cask adoptopenjdk8"
+    echo "  Windows: https://www.oracle.com/java/technologies/downloads/#java8-windows"
+    exit 1
+fi
+
+java_version=$(java -version 2>&1 | head -1)
+echo -e "${GREEN}✓ Java: $java_version${NC}"
+
+# Instalar MineRL do GitHub (versão mais recente)
+echo -e "${BLUE}[3/4] Instalando MineRL do GitHub (versão mais recente)...${NC}"
+echo -e "${YELLOW}Isto pode levar alguns minutos...${NC}"
+
+pip install git+https://github.com/minerllabs/minerl || {
+    echo -e "${YELLOW}⚠️  Tentando com --user flag...${NC}"
+    pip install git+https://github.com/minerllabs/minerl --user
+}
+
+# Verificar MineRL
+echo -e "${BLUE}[4/4] Verificando MineRL...${NC}"
+python << 'EOF'
+try:
+    import minerl
+    print(f"✓ MineRL instalado com sucesso!")
+    print(f"  Versão: {minerl.__version__ if hasattr(minerl, '__version__') else 'dev'}")
+    
+    # Listar ambientes disponíveis
+    print("\n✓ Ambientes disponíveis:")
+    envs = [
+        "MineRLNavigate-v0",
+        "MineRLNavigateDense-v0", 
+        "MineRLObtainDiamond-v0",
+        "MineRLObtainDiamondDense-v0",
+        "MineRLBasaltFindCave-v0",
+        "MineRLBasaltCreateVillageAnimalPen-v0",
+        "MineRLBasaltBuildVillageHouse-v0",
+        "MineRLBasaltMakeWaterfall-v0"
+    ]
+    for env in envs[:3]:
+        print(f"  - {env}")
+    print(f"  ... e mais {len(envs)-3}")
+    
+except Exception as e:
+    print(f"✗ Erro ao verificar MineRL: {e}")
+    print("Tente: pip install git+https://github.com/minerllabs/minerl --force-reinstall")
+    import sys
+    sys.exit(1)
+EOF
 
 echo ""
 echo -e "${GREEN}======================================"
-echo "   Setup Concluído!"
+echo "   Setup Minecraft Concluído!"
 echo "=====================================${NC}"
 echo ""
-echo "Próximo passo:"
+echo -e "${BLUE}Próximo passo:${NC}"
 echo -e "  ${YELLOW}bash scripts/run.sh${NC}"
 echo ""
+echo -e "${YELLOW}Nota: MineRL vai baixar ~2GB na primeira execução${NC}"
+echo -e "${GREEN}✓ Tudo pronto!${NC}"
