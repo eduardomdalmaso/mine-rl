@@ -48,7 +48,7 @@ echo -e "${BLUE}[5/5] Instalando MineRL...${NC}"
 read -p "Deseja instalar MineRL para Minecraft? (s/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Ss]$ ]]; then
-    pip install minerl
+    pip install pip install git+https://github.com/minerllabs/minerl --user
     echo -e "${GREEN}✓ MineRL instalado${NC}"
     echo -e "${YELLOW}⚠️  Nota: MineRL vai baixar Minecraft 1.12.2 na primeira execução${NC}"
 else

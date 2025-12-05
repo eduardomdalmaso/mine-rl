@@ -105,7 +105,7 @@ agent.render_episode(num_steps=500)
 ✓ ~10GB espaço livre (para MineRL)
 ```
 
-## 🖥️ Performance Esperada
+## 🖥️ Setup Utilizado
 
 | Recurso | Seu Setup |
 |---------|-----------|
