@@ -1,6 +1,6 @@
 #!/bin/bash
-# Mine-RL Quick Start - Inicia o agente visual rapidamente
-# Use este script para rodar o agente com um comando
+# Mine-RL Quick Start - Inicia o agente visual rapidamente (versão conda)
+# Se não existir um ambiente conda chamado minerl, cria automaticamente
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -14,21 +14,22 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo -e "${BLUE}======================================"
-echo "   Mine-RL - Quick Start"
+echo "   Mine-RL - Quick Start (Conda)"
 echo "=====================================${NC}"
 echo ""
 
-# Verificar se venv existe
-if [ ! -d "venv" ]; then
-    echo -e "${YELLOW}⚠️  Ambiente virtual não encontrado!${NC}"
-    echo "Execute primeiro: bash scripts/complete_setup.sh"
-    exit 1
+# Verificar se ambiente conda 'minerl' existe
+if ! conda info --envs | grep -q "^minerl"; then
+    echo -e "${YELLOW}⚠️  Ambiente conda 'minerl' não encontrado!${NC}"
+    echo "Criando ambiente conda 'minerl' com Python 3.8..."
+    conda create --name minerl python=3.8
 fi
 
-# Ativar venv
-source venv/bin/activate
+# Ativar ambiente conda
+eval "$(conda shell.bash hook)"
+conda activate minerl
 
-echo -e "${GREEN}✓ Ambiente ativado${NC}"
+echo -e "${GREEN}✓ Ambiente conda 'minerl' ativado${NC}"
 echo ""
 
 # Função para verificar se as dependências estão instaladas
